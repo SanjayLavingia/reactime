@@ -5,12 +5,15 @@
 /* eslint-disable implicit-arrow-linebreak */
 
 // store ports in an array
+// the portsArr stores all ports for our files to 'talk' to each other. The chrome API port connects our frontend to background.js 
+console.log('inside background js'); 
 const portsArr = [];
 const reloaded = {};
 const firstSnapshotReceived = {};
 // there will be the same number of objects in here as there are reactime tabs open for each user application being worked on
 const tabsObj = {};
 
+console.log(tabsObj);
 function createTabObj(title) {
   // update tabsObj
   return {
@@ -103,9 +106,9 @@ chrome.runtime.onConnect.addListener(port => {
 
   // push every port connected to the ports array
   portsArr.push(port);
-
   // send tabs obj to the connected devtools as soon as connection to devtools is made
   if (Object.keys(tabsObj).length > 0) {
+    console.log(tabsObj)
     port.postMessage({
       action: 'initialConnectSnapshots',
       payload: tabsObj,
@@ -135,6 +138,9 @@ chrome.runtime.onConnect.addListener(port => {
     // }
     // ---------------------------------------------------------------
     const { action, payload, tabId } = msg;
+    // console.log(`this is message msg`, msg)
+    // console.log('we should see the tabsObj', payload)
+
     switch (action) {
       case 'import': // create a snapshot property on tabId and set equal to tabs object
         // may need do something like filter payload from stateless
@@ -161,6 +167,7 @@ chrome.runtime.onConnect.addListener(port => {
         tabsObj[tabId].currParent = 1;
         // resets currBranch
         tabsObj[tabId].currBranch = 0;
+        // console.log('inside of emptySnap in background.js ', tabsObj)
         return true;
       case 'setLock':
         tabsObj[tabId].mode.locked = payload;

@@ -12,6 +12,15 @@ import {
 } from './types/backendTypes';
 
 const componentActionsRecord: HookStates = [];
+/*
+export type HookStates = Array<HookStateItem>;
+
+export interface HookStateItem {
+  state: any;
+  component: any;
+}
+
+*/
 let index = 0;
 
 export default {

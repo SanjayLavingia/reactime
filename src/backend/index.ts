@@ -8,6 +8,7 @@
  * @function linkFiber
  */
 import 'core-js';
+import { stringify } from 'querystring';
 import 'regenerator-runtime/runtime';
 import linkFiberStart from './linkFiber';
 import timeJumpStart from './timeJump';
@@ -44,8 +45,15 @@ function getRouteURL(node: SnapshotNode): string {
 
 // * Event listener for time-travel actions
 window.addEventListener('message', ({ data: { action, payload } }: MsgData) => {
+  //msgData {
+  //   data: {
+  //     action: string,
+  //     payload: any
+  //   }
+  // }
   switch (action) {
     case 'jumpToSnap':
+      console.log('jumping'); 
       timeJump(payload, true); // * This sets state with given payload
       // Get the pathname from payload and add new entry to browser history
       // MORE: https://developer.mozilla.org/en-US/docs/Web/API/History/pushState

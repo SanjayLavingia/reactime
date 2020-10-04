@@ -3,7 +3,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
+import {original} from 'immer'; 
 import * as types from '../constants/actionTypes.ts';
+import { immerable } from 'immer';
 
 export default (state, action) => produce(state, draft => {
   const { port, currentTab, tabs } = draft;
@@ -19,6 +21,10 @@ export default (state, action) => produce(state, draft => {
   // eslint-disable-next-line max-len
   // function that finds the index in the hierarchy and extracts the name of the equivalent index to add to the post message
   // eslint-disable-next-line consistent-return
+ 
+  //This function is used inside of the Move Backwards action in the reducer
+  // it is supposed to find the name by the newIndex parsing through the hierarchy to send to background.js the current name in the jump action
+  // Idk wtf that means, but the logic is: 
   const findName = (index, obj) => {
     // eslint-disable-next-line eqeqeq
     if (obj && obj.index == index) {
@@ -38,9 +44,18 @@ export default (state, action) => produce(state, draft => {
     }
   };
 
+
+
   switch (action.type) {
+    //this case is attached to our move backwards button on the frontend (the '<' button)
     case types.MOVE_BACKWARD: {
+      console.log('inside MOVE_BACKWARD')
       if (snapshots.length > 0 && sliderIndex > 0) {
+      
+        // console.log(tabs);
+        // console.log(tabsObj); 
+        // I wonder why we're only sliding the index back by 1? 
+        // what happens when we jump back multiple jumps backwards? Does the slider move to the correct index? 
         const newIndex = sliderIndex - 1;
         // eslint-disable-next-line max-len
         // finds the name by the newIndex parsing through the hierarchy to send to background.js the current name in the jump action
@@ -61,6 +76,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.MOVE_FORWARD: {
+      console.log('inside MOVE_FOWARD'); 
       if (sliderIndex < snapshots.length - 1) {
         const newIndex = sliderIndex + 1;
         // eslint-disable-next-line max-len
@@ -86,6 +102,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.SLIDER_ZERO: {
+      console.log('inside SLIDER_ZERO'); 
       // eslint-disable-next-line max-len
       // resets name to 0 to send to background.js the current name in the jump action
       port.postMessage({
@@ -99,16 +116,21 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.CHANGE_VIEW: {
+      console.log('inside CHANGE_VIEW'); 
       // unselect view if same index was selected
       if (viewIndex === action.payload) tabs[currentTab].viewIndex = -1;
       else tabs[currentTab].viewIndex = action.payload;
       break;
     }
     case types.CHANGE_SLIDER: {
+      console.log('inside CHANGE_SLIDER'); 
+      console.log('this is the tabsobj', original(tabs))
       // eslint-disable-next-line max-len
       // finds the name by the action.payload parsing through the hierarchy to send to background.js the current name in the jump action
       const nameFromIndex = findName(action.payload, hierarchy);
-
+      console.log('name from index', nameFromIndex)
+      console.log('snapshots:', original(snapshots));
+      console.log('action.payload', action, action.payload); 
       port.postMessage({
         action: 'jumpToSnap',
         payload: snapshots[action.payload],
@@ -120,6 +142,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.EMPTY: {
+      console.log('inside EMPTY'); 
       port.postMessage({ action: 'emptySnap', tabId: currentTab });
       tabs[currentTab].sliderIndex = 0;
       tabs[currentTab].viewIndex = -1;
@@ -150,15 +173,18 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.SET_PORT: {
+      console.log('inside SET_PORT'); 
       draft.port = action.payload;
       break;
     }
     case types.IMPORT: {
+      console.log('inside IMPORT'); 
       port.postMessage({ action: 'import', payload: action.payload, tabId: currentTab });
       tabs[currentTab].snapshots = action.payload;
       break;
     }
     case types.TOGGLE_MODE: {
+      console.log('inside TOGGLE_MODE'); 
       mode[action.payload] = !mode[action.payload];
       const newMode = mode[action.payload];
       let actionText;
@@ -179,17 +205,21 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.PAUSE: {
+      console.log('inside PAUSE'); 
       clearInterval(intervalId);
       tabs[currentTab].playing = false;
       tabs[currentTab].intervalId = null;
       break;
     }
     case types.PLAY: {
+      console.log('inside PLAY'); 
       tabs[currentTab].playing = true;
       tabs[currentTab].intervalId = action.payload;
       break;
     }
     case types.INITIAL_CONNECT: {
+      console.log('inside INTITIAL_CONNECT'); 
+      // console.log('inside the reducer')
       const { payload } = action;
       Object.keys(payload).forEach(tab => {
         // check if tab exists in memory
@@ -209,6 +239,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.NEW_SNAPSHOTS: {
+      console.log('inside NEW_SNAPSHOTS')
       const { payload } = action;
 
       Object.keys(tabs).forEach(tab => {
@@ -230,6 +261,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.SET_TAB: {
+      console.log('inside SET_TAB'); 
       if (typeof action.payload === 'number') {
         draft.currentTab = action.payload;
         break;
@@ -240,6 +272,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.DELETE_TAB: {
+      console.log('inside DELETE_TAB'); 
       delete draft.tabs[action.payload];
       if (draft.currentTab === action.payload) {
         // if the deleted tab was set to currentTab, replace currentTab with
