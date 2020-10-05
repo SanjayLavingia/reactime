@@ -120,6 +120,7 @@ const PerfView = (props: PerfViewProps) => {
       )
       .on('mouseover', function () {
         d3.select(this).attr('stroke', '#000');
+        console.log('inside PerfView.tsx mousover function')
       })
       .on('mouseout', function () {
         d3.select(this).attr('stroke', null);

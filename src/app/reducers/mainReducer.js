@@ -2,7 +2,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-param-reassign */
-import produce from 'immer';
+import {produce, original} from 'immer';
 import * as types from '../constants/actionTypes.ts';
 
 export default (state, action) => produce(state, draft => {
@@ -15,7 +15,7 @@ export default (state, action) => produce(state, draft => {
     viewIndex,
     sliderIndex,
   } = tabs[currentTab] || {};
-
+  console.log('inside reducer');
   // eslint-disable-next-line max-len
   // function that finds the index in the hierarchy and extracts the name of the equivalent index to add to the post message
   // eslint-disable-next-line consistent-return
@@ -66,7 +66,9 @@ export default (state, action) => produce(state, draft => {
         // eslint-disable-next-line max-len
         // finds the name by the newIndex parsing through the hierarchy to send to background.js the current name in the jump action
         const nameFromIndex = findName(newIndex, hierarchy);
-
+        console.log(`Inside MOVE_FOWARD, nameFromIndex:`, nameFromIndex);
+        console.log('inside MOVE_FOWARD, tabs', tabs);
+        console.log('inside MOVE_FOWARD, original(tabs):', original(tabs)); 
         port.postMessage({
           action: 'jumpToSnap',
           index: newIndex,
@@ -190,6 +192,7 @@ export default (state, action) => produce(state, draft => {
       break;
     }
     case types.INITIAL_CONNECT: {
+      console.log('inside the reducer');
       const { payload } = action;
       Object.keys(payload).forEach(tab => {
         // check if tab exists in memory

@@ -170,9 +170,9 @@ function createTree(
   fromSibling = false
 ) {
   // Base case: child or sibling pointed to null
-  if (currentFiber.tag === 5) {
-    console.log(currentFiber.stateNode)
-  }
+  // if (currentFiber.tag === 5) {
+  //   console.log(currentFiber.stateNode)
+  // }
   if (!currentFiber) return null;
   if (!tree) return tree;
 
@@ -229,8 +229,6 @@ function createTree(
       stateNode.state,
       stateNode
     );
-    console.log(componentData)
-    // console.log('stateNode inside of line 232:', stateNode)
     newState = stateNode.state;
     componentFound = true;
   }
@@ -372,10 +370,15 @@ export default (snap: Snapshot, mode: Mode): (() => void) => {
   }
 
   return () => {
+    //hook onto the current window
     const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    //if there's react on the page, invoke get() 
     const reactInstance = devTools ? devTools.renderers.get(1) : null;
+    // if (reactInstance === null) return; 
+    console.log(reactInstance); 
+    //this chain get's our fiber root 
     fiberRoot = devTools.getFiberRoots(1).values().next().value;
-    console.log(fiberRoot); 
+    // console.log(fiberRoot); 
     const throttledUpdateSnapshot = throttle(() => updateSnapShotTree(snap, mode), 70);
     document.addEventListener('visibilitychange', onVisibilityChange);
     if (reactInstance && reactInstance.version) {
