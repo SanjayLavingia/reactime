@@ -128,9 +128,9 @@ export default (state, action) => produce(state, draft => {
       // eslint-disable-next-line max-len
       // finds the name by the action.payload parsing through the hierarchy to send to background.js the current name in the jump action
       const nameFromIndex = findName(action.payload, hierarchy);
-      console.log('name from index', nameFromIndex)
+      // console.log('name from index', nameFromIndex)
       console.log('snapshots:', original(snapshots));
-      console.log('action.payload', action, action.payload); 
+      // console.log('action.payload', action, action.payload); 
       port.postMessage({
         action: 'jumpToSnap',
         payload: snapshots[action.payload],
@@ -264,6 +264,8 @@ export default (state, action) => produce(state, draft => {
       console.log('inside SET_TAB'); 
       if (typeof action.payload === 'number') {
         draft.currentTab = action.payload;
+        console.log('inside of SET_TAB action:',action)
+        console.log('tabs object:', original(tabs))
         break;
       } else if (typeof action.payload === 'object') {
         draft.currentTab = action.payload.tabId;

@@ -45,6 +45,7 @@ function MainContainer(): any {
           break;
         }
         case 'changeTab': {
+          console.log('inside changeTab in main container'); 
           dispatch(setTab(payload));
           break;
         }
