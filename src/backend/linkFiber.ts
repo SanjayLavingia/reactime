@@ -168,7 +168,9 @@ function createTree(
   fromSibling = false
 ) {
   // Base case: child or sibling pointed to null
-
+  if (currentFiber.key !== null) {
+    console.log(currentFiber);
+  }
   if (!currentFiber) return null;
   if (!tree) return tree;
 
