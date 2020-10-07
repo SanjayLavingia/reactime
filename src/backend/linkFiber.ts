@@ -170,6 +170,7 @@ function createTree(
   // Base case: child or sibling pointed to null
   if (currentFiber.key !== null) {
     console.log(currentFiber);
+
   }
   if (!currentFiber) return null;
   if (!tree) return tree;
@@ -348,7 +349,10 @@ function createTree(
     circularComponentTable.add(sibling);
     createTree(sibling, newNode, true);
   }
+  if (currentFiber.key !== null) {
+    console.log(tree); 
 
+  }
   return tree;
 }
 
