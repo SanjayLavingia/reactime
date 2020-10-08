@@ -36,6 +36,7 @@ let isRecoil = false;
 let allAtomsRelationship = [];
 let initialstart = false;
 let idCounter = 0;  
+let rtid = null; 
 
 // Simple check for whether our target app uses Recoil
 if (window[`$recoilDebugStates`]) {
@@ -185,12 +186,10 @@ function createTree(
 
   
   if (currentFiber.key !== null) {
-  console.log(currentFiber.child.stateNode.setAttribute('rtid', `fromLinkFiber${idCounter}`));
+  currentFiber.child.stateNode.setAttribute('id', `fromLinkFiber${idCounter}`)
   idCounter++
-  const rtid = `fromLinkFiber${idCounter}`
-  console.log(currentFiber.child.stateNode); 
-  }
-
+  rtid = `fromLinkFiber${idCounter}`
+  } 
   // These have the newest state. We update state and then
   // called updateSnapshotTree()
 
@@ -370,13 +369,15 @@ function createTree(
       newNode = tree.addSibling(
         newState,
         elementType ? elementType.name : 'nameless',
-        componentData
+        componentData,
+        rtid
       );
     } else {
       newNode = tree.addChild(
         newState,
         elementType ? elementType.name : 'nameless',
-        componentData
+        componentData,
+        rtid
       );
     }
   } else {
