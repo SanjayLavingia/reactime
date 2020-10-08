@@ -35,6 +35,7 @@ const circularComponentTable = new Set();
 let isRecoil = false;
 let allAtomsRelationship = [];
 let initialstart = false;
+let idCounter = 0;  
 
 // Simple check for whether our target app uses Recoil
 if (window[`$recoilDebugStates`]) {
@@ -179,12 +180,16 @@ function createTree(
   fromSibling = false
 ) {
   // Base case: child or sibling pointed to null
-   if (currentFiber.key !== null) {
-    console.log(currentFiber.child.stateNode.setAttribute('id', 'fromLinkFiber'));
-    console.log(currentFiber.child.stateNode); 
-   }
   if (!currentFiber) return null;
   if (!tree) return tree;
+
+  
+  if (currentFiber.key !== null) {
+  console.log(currentFiber.child.stateNode.setAttribute('rtid', `fromLinkFiber${idCounter}`));
+  idCounter++
+  const rtid = `fromLinkFiber${idCounter}`
+  console.log(currentFiber.child.stateNode); 
+  }
 
   // These have the newest state. We update state and then
   // called updateSnapshotTree()
