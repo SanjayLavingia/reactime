@@ -28,6 +28,7 @@ const ComponentMap = (props: componentMapProps) => {
   const width: any = '100vw';
   const height: any = '100vh';
   let data: Object = snapshots[lastSnap];
+  console.log(data)
 
   useEffect(() => {
     document.getElementById('canvas').innerHTML = '_';
@@ -148,7 +149,7 @@ const ComponentMap = (props: componentMapProps) => {
         //TODO -> Alter incoming snapshots so there is useful data to show on hover.
         nodeEnter.on('mouseover', function (d: any, i: number): any {
             //onHover is an action in progress 
-            dispatch(onHover());
+            dispatch(onHover(d.data.rtid));
             d3.select(this)
               .append('text')
               .text(() => {
