@@ -28,7 +28,6 @@ const ComponentMap = (props: componentMapProps) => {
   const width: any = '100vw';
   const height: any = '100vh';
   let data: Object = snapshots[lastSnap];
-  console.log(data)
 
   useEffect(() => {
     document.getElementById('canvas').innerHTML = '_';
