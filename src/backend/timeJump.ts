@@ -35,6 +35,8 @@ export default (origin, mode) => {
     const component = componentActionsRecord.getComponentByIndex(
       target.componentData.index,
     );
+    console.log('component ActionRecord', componentActionsRecord);
+    console.log('component', component); 
     if (component && component.setState) {
       component.setState(
         prevState => {

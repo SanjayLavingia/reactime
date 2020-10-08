@@ -59,7 +59,14 @@ window.addEventListener('message', ({ data: { action, payload } }: MsgData) => {
       mode.paused = payload;
       break;
     case 'onHover':
+      //find the correct element, add event listener setTimeout 
+      console.log('hover')
+      const numberKeys = document.querySelectorAll('.key-container.number-key');
+      console.log(numberKeys[0].setAttribute('id', 'fromOnHover'));
+      console.log(document.querySelectorAll('.key-container.number-key'));
+      //for loop, if statement,
       // console.log('WE MADE IT ALL THE WAY FROM THE FRONTEND! HERE\'S THE PAYLOAD:', payload);
+      
       break;
     default:
       break;

@@ -179,10 +179,10 @@ function createTree(
   fromSibling = false
 ) {
   // Base case: child or sibling pointed to null
-  if (currentFiber.key !== null) {
-    console.log(currentFiber);
-
-  }
+   if (currentFiber.key !== null) {
+    console.log(currentFiber.child.stateNode.setAttribute('id', 'fromLinkFiber'));
+    console.log(currentFiber.child.stateNode); 
+   }
   if (!currentFiber) return null;
   if (!tree) return tree;
 
@@ -392,7 +392,7 @@ function createTree(
     createTree(sibling, newNode, true);
   }
   if (currentFiber.key !== null) {
-    console.log(tree); 
+    // console.log(tree); 
 
   }
   return tree;
