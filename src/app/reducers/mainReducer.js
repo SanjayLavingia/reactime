@@ -42,7 +42,7 @@ export default (state, action) => produce(state, draft => {
     case types.ON_HOVER: {
       port.postMessage({
         action: 'onHover',
-        payload: 'payload from Reducer ON_HOVER',
+        payload: action.payload,
         tabId: currentTab,
       })
       break; 
